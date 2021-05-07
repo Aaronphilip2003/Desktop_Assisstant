@@ -10,6 +10,7 @@ import subprocess
 
 dir="D:\Spotify.exe.lnk"
 calcdir="C:\Windows\System32\calc.exe"
+covdir="D:\COVID.exe.lnk"
 
 engine=pyttsx3.init('sapi5')
 
@@ -26,14 +27,13 @@ def speak(audio):
 def wishMe():
     hour=int(datetime.datetime.now().hour)
     if hour>=0 and hour<12:
-        speak("Good Morning!")
+        speak("Good Morning! How can I help You?")
     elif hour>12 and hour<18:
-        speak("Good Afternoon!")
+        speak("Good Afternoon! How can I help You?")
     else:
-        speak("Good Evening!")
+        speak("Good Evening! How can I help You?")
 
 
-    speak("Hello! How can I help You")
 
 def takeCommand():
     r=sr.Recognizer()
@@ -89,13 +89,36 @@ if __name__=="__main__":
             # subprocess.call(dir)
 
         elif 'calculator' in query:
-            pyttsx3.speak("Opening Calculator....")
+            speak("Opening Calculator....")
             os.startfile(calcdir)
             # os.system(calcdir)
 
+        elif 'covid' in query:
+            speak("Searching for COVID cases in Pune")
+            os.system(covdir)
+
+        elif 'notepad' in query:
+            file1 = open("MyFile.txt", "a")
+            speak("What do you want to write in the notepad:")
+            r = sr.Recognizer()
+            with sr.Microphone() as source:
+                print("Listening.........")
+                r.pause_threshold = 0.5
+                audio = r.listen(source)
+
+            try:
+                print("Recognising....")
+                query = r.recognize_google(audio, language='en-in')
+                file1.write(query+ " ")
+
+
+            except Exception as e:
+                pass
+
+
 
         elif 'exit' or 'quit' or 'bye' in query:
-            pyttsx3.speak("Exiting...")
+            speak("Exiting...")
             break
 
 
